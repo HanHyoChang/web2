@@ -1,0 +1,13 @@
+.main_text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url(); /* url()에 이미지 경로 설정해주기 */
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color:black;
+    width: 100%;
+}
+
