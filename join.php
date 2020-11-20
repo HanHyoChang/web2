@@ -166,6 +166,43 @@
                     <span class="btn btn-primary form-control" onclick="check_input()">회원가입 </span>&nbsp;
                     <span class="btn btn-primary form-control" onclick="reset_form()">초기화</span>
                     </form>
+
+                    <div class="form-group">
+                        <span id="id_check_msg" data-check="0"></span> <!--커스텀 속성 :data_check="0" -->
+                    </div>
+
+                    <script>
+                        /* 아이디 중복 체크 (비동기 통신) */
+                        $(function() { // 문서가 로드되면 function을 실행
+                            $("#id").blur(function() { // 아이디가 id인것을 찾아 focus()를 빠져나갈때 발생 이벤트
+                                if($(this).val()=="") {
+                                    $("#id_check_msg").html("아이디를 입력하세요.").css("color","red").attr("data-check","0"); // 선택자를 .연사자 추가해서 계속사용가능
+                                    $(this).focus();
+                                } else {
+                                    checkIdAjax();
+                                }
+                            });
+                        });
+                        // 아이디 중복 체크 (비동기 통신)
+                        function checkIdAjax() { // id값을 post 전송해서 서버와 통신 후 중복결과 json형태로 받아오는 함수
+                            $.ajax({ // 비동기통신방법, 객체로 보낼때{}로 사용한다. 
+                                url : "./ajax/check_id.php", // 데이터 보낼 url
+                                type : "post",              // 데이터 전송방식
+                                dataType : "json",          // 데이터 타입
+                                data : {
+                                    "id" : $("#id").val() // 데이터 인자
+                                },
+                                success : function(data) {  
+                                    if(data.check) {    //if(data.check)는 url로 데이터 보내서 data.check 값이 참이면 사용가능 출력하고 1로 바꿔 사용 가능한 아이디임을 확인한다.
+                                        $("#id_check_msg").html("아이디를 입력하세요.").css("color","red").attr("data-check","1");
+                                    } else {    // data.check 값이 0이라면 중복된 아이디  출력 후 값을 0으로 저장해서 여전히 중복체크가 필요하다고 알려줍니다.
+                                        $("#id_check_msg").html("중복된 아이디입니다.").css("color","blue").attr("data-chekc","0"); 
+                                        $("#id").focus();
+                                    }
+                                }
+                            });
+                        }
+
                 </div>
             </div>
         </div>
